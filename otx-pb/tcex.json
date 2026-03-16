@@ -1,6 +1,6 @@
 {
   "package": {
-    "app_name": "TCPB_-_Basic_Template",
+    "app_name": "OTX_Pulses_to_ThreatConnect",
     "excludes": [
       ".gitignore",
       ".pre-commit-config.yaml",
