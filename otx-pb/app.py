@@ -6,7 +6,7 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, List, Optional, Union
 from uuid import uuid5, NAMESPACE_URL
-
+import json
 from tcex import TcEx
 from tcex.exit import ExitCode
 
@@ -234,6 +234,9 @@ class App(PlaybookApp):
         tlp = detail.get('TLP')
         adversary = {'name':detail.get('adversary'), 'type': 'Adversary'}
 
+        if not name:
+            self.tcex.exit.exit(ExitCode.FAILURE, f'JSON: {json.dumps(detail, indent=4)}')
+
         # High-level lists
         tags = detail.get('tags', [])
         references = detail.get('references', [])
@@ -296,7 +299,7 @@ class App(PlaybookApp):
         }
 
         if tlp:
-            group['Security Label'] = f"TLP: {tlp}"
+            group['Security Label'] = f"TLP: {tlp.upper()}"
 
         return group
 
@@ -389,9 +392,11 @@ class App(PlaybookApp):
             return
         modified_since_iso = last_run_dt.isoformat().replace('+00:00', 'Z')
 
-        all_pulse_ids: List[str] = []
         next_url: Optional[str] = '/pulses/subscribed'
         params: Optional[dict] = {'page': 1, 'modified_since': modified_since_iso}
+
+        all_errors: List[dict] = []
+        all_successes: List[dict] = []
 
         with self.tcex.session.external as s:
             first_page = True
@@ -408,12 +413,16 @@ class App(PlaybookApp):
                 if payload is None:
                     return
 
+                page_pulse_ids = extract_pulse_ids(payload)
+
+                if not page_pulse_ids:
+                    self.tcex.log.info('No pulses found on current page.')
+                else:
+                    self.tcex.log.info(f'Processing {len(page_pulse_ids)} pulses on current page.')
+
                 if first_page:
                     self.tcex.log.info('Data downloaded successfully.')
                     first_page = False
-
-                page_pulse_ids = extract_pulse_ids(payload)
-                all_pulse_ids.extend(page_pulse_ids)
 
                 next_url = extract_next_token(payload)
                 if next_url:
@@ -422,58 +431,51 @@ class App(PlaybookApp):
                 # After the first request, rely on the next URL for pagination.
                 params = None
 
-                # DEBUG: For testing purposes, break after the first page
-                break
+                # For this page, fetch pulse details and build groups/indicators.
+                page_pulse_details: List[dict] = []
+                for pulse_id in page_pulse_ids:
+                    detail = self._fetch_pulse_detail(s, pulse_id)
+                    if detail is not None:
+                        fields = self._extract_pulse_detail_fields(detail)
+                        page_pulse_details.append(fields)
 
-            self.tcex.log.info(f'Extracted {len(all_pulse_ids)} pulses across all pages.')
+                for group in page_pulse_details:
+                    self._batch_create_groups([group])
 
-            pulse_details: List[dict] = []
-            for pulse_id in all_pulse_ids:
-                detail = self._fetch_pulse_detail(s, pulse_id)
-                if detail is not None:
-                    fields = self._extract_pulse_detail_fields(detail)
-                    pulse_details.append(fields)
-                
-                # DEBUG: For testing purposes, break after the first pulse
-                break
+                    associated_groups = group.get('associated_groups', [])
+                    associated_indicators = group.get('associated_indicators', [])
+                    group_xid = self.batch.generate_xid([self.in_.owner, group['type'], group['name']])
 
-            for group in pulse_details:
-                self._batch_create_groups([group])
+                    for associated_group in associated_groups:
+                        associated_group['associatedGroupXid'] = group_xid
+                    self._batch_create_groups(associated_groups)
 
-                associated_groups = group.get('associated_groups', [])
-                associated_indicators = group.get('associated_indicators', [])
-                group_xid = self.batch.generate_xid([self.in_.owner, group['type'], group['name']])
+                    for indicator in associated_indicators:
+                        indicator['associatedGroupXid'] = group_xid
+                    self._batch_create_indicators(associated_indicators)
 
-                for associated_group in associated_groups:
-                    associated_group['associatedGroupXid'] = group_xid
-                self._batch_create_groups(associated_groups)
+                if page_pulse_details:
+                    self.tcex.log.info(f'Submitting batch for {len(page_pulse_details)} pulses on current page.')
+                    batch_response = self.batch.submit_all()
 
-                for indicator in associated_indicators:
-                    indicator['associatedGroupXid'] = group_xid
-                self._batch_create_indicators(associated_indicators)
+                    for item in batch_response:
+                        all_errors.extend(item.get('errors', []))
+                        all_successes.extend(item.get('successes', []))
 
-            self.tcex.log.info(f'Fetched details for {len(pulse_details)} pulses.')
+        self.batch.close()
 
-            batch_response = self.batch.submit_all()
-            self.batch.close()
+        if all_errors:
+            self.tcex.log.error('App.run: batch submission failed with %d errors', len(all_errors))
+            self.tcex.log.error('App.run: batch submission error: %s', all_errors[0])
 
-            errors = []
-            successes = []
-            for item in batch_response:
-                errors.extend(item.get('errors', []))
-                successes.extend(item.get('successes', []))
-            if errors:
-                self.tcex.log.error('App.run: batch submission failed with %d errors', len(errors))
-                self.tcex.log.error('App.run: batch submission error: %s', errors[0])
+        if all_successes:
+            self.tcex.log.info('App.run: batch submission successful with %d items', len(all_successes))
+            self.tcex.log.info('App.run: batch submission success: %s', all_successes[0])
 
-            if successes:
-                self.tcex.log.info('App.run: batch submission successful with %d items', len(successes))
-                self.tcex.log.info('App.run: batch submission success: %s', successes[0])
-
-            last_run_dt = datetime.now(timezone.utc)
-            self.tcex.app.results_tc('last_run', last_run_dt.isoformat())
-            self.tcex.log.info(f'Last run: {last_run_dt.isoformat()}')
-            self.tcex.exit.exit(ExitCode.SUCCESS, f'Batch submission successful with {len(successes)} items.')
+        last_run_dt = datetime.now(timezone.utc)
+        self.tcex.app.results_tc('last_run', last_run_dt.isoformat())
+        self.tcex.log.info(f'Last run: {last_run_dt.isoformat()}')
+        self.tcex.exit.exit(ExitCode.SUCCESS, f'Batch submission successful with {len(all_successes)} items.')
 
     def write_output(self):
         """Write the Playbook output variables.
