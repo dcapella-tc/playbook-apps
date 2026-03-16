@@ -2,7 +2,7 @@
   "allowOnDemand": true,
   "appId": "6e26ba55-0300-5462-aca7-ea049494c8a5",
   "category": "Unsupported",
-  "displayName": "Example Basic Playbook App",
+  "displayName": "OTX Pulses to ThreatConnect",
   "features": [
     "aotExecutionEnabled",
     "appBuilderCompliant",
@@ -13,7 +13,7 @@
   "languageVersion": "3.11",
   "listDelimiter": "|",
   "minServerVersion": "7.2.0",
-  "note": "A template that provides the structure for a Playbook App without any App logic.\n",
+  "note": "This app is used to import OTX Pulses into ThreatConnect.\n",
   "playbook": {
     "type": "Unsupported"
   },
