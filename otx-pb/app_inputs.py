@@ -1,13 +1,17 @@
 """App Inputs"""
 # pyright: reportGeneralTypeIssues=false
+from typing import cast
 
+from tcex.input.field_type import String
 from tcex.input.input import Input
 from tcex.input.model.app_playbook_model import AppPlaybookModel
 
 
 class AppBaseModel(AppPlaybookModel):
     """Base model for the App containing any common inputs."""
-
+    owner: String
+    otx_api_key: String
+    last_run: String = cast(String, '30 Days Ago')
 
 class AppInputs:
     """App Inputs"""
