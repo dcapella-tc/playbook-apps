@@ -168,7 +168,7 @@ class App(PlaybookApp):
         super().__init__(_tcex)
 
         # properties
-        self.batch = self.tcex.api.tc.v2.batch(self.in_.tc_owner)
+        self.batch = self.tcex.api.tc.v2.batch(self.in_.owner)
 
     def setup(self):
         """Perform prep/setup logic."""
@@ -302,7 +302,7 @@ class App(PlaybookApp):
 
     # def _normalize_group_batch(self, group: dict) -> dict:
     #     """Normalize a group for batch creation."""
-    #     xid = self.batch.generate_xid([self.in_.tc_owner, group['type'], group['name']])
+    #     xid = self.batch.generate_xid([self.in_.owner, group['type'], group['name']])
     #     # xid = self._generate_xid(group)
     #     group['xid'] = xid
     #     group_batch = {
@@ -334,7 +334,7 @@ class App(PlaybookApp):
         # indicator_batch = {
         #     'type': indicator['type'],
         #     'summary': indicator['summary'],
-        #     'xid': self.batch.generate_xid([self.in_.tc_owner, indicator['type'], indicator['summary']])
+        #     'xid': self.batch.generate_xid([self.in_.owner, indicator['type'], indicator['summary']])
         #     # 'xid': self._generate_xid(indicator)
         # }
 
@@ -349,7 +349,7 @@ class App(PlaybookApp):
             group_batch = self.batch.group(
                 group['type']
                 , group['name']
-                , xid = self.batch.generate_xid([self.in_.tc_owner, group['type'], group['name']])
+                , xid = self.batch.generate_xid([self.in_.owner, group['type'], group['name']])
             )
 
             attributes = group.get('attributes', [])
@@ -442,7 +442,7 @@ class App(PlaybookApp):
 
                 associated_groups = group.get('associated_groups', [])
                 associated_indicators = group.get('associated_indicators', [])
-                group_xid = self.batch.generate_xid([self.in_.tc_owner, group['type'], group['name']])
+                group_xid = self.batch.generate_xid([self.in_.owner, group['type'], group['name']])
 
                 for associated_group in associated_groups:
                     associated_group['associatedGroupXid'] = group_xid
