@@ -1,0 +1,65 @@
+{
+  "allowOnDemand": true,
+  "appId": "6e26ba55-0300-5462-aca7-ea049494c8a5",
+  "category": "Unsupported",
+  "displayName": "OTX Pulses to ThreatConnect",
+  "features": [
+    "aotExecutionEnabled",
+    "appBuilderCompliant",
+    "fileParams",
+    "redisPasswordSupport",
+    "runtimeVariables"
+  ],
+  "languageVersion": "3.11",
+  "listDelimiter": "|",
+  "minServerVersion": "7.2.0",
+  "note": "This app is used to import OTX Pulses into ThreatConnect.\n",
+  "playbook": {
+    "type": "Unsupported"
+  },
+  "programLanguage": "PYTHON",
+  "programMain": "run.py",
+  "programVersion": "1.0.0",
+  "runtimeLevel": "Playbook",
+  "sdkVersion": "4.0.1",
+  "params": [
+    {
+      "name": "owner",
+      "type": "String",
+      "label": "Owner",
+      "allowMultiple": false,
+      "encrypt": false,
+      "required": true,
+      "hidden": false,
+      "feedDeployer": false,
+      "viewRows": 1,
+      "note": "e.g., Capella Community",
+      "sequence": 0,
+      "serviceConfig": false,
+      "setup": false,
+      "validValues": [],
+      "playbookDataType": [
+        "String"
+      ],
+      "intelType": []
+    },
+    {
+      "name": "otx_api_key",
+      "type": "String",
+      "label": "OTX API Key",
+      "allowMultiple": false,
+      "encrypt": true,
+      "required": true,
+      "hidden": false
+    },
+    {
+      "name": "last_run",
+      "type": "String",
+      "label": "Last Run",
+      "allowMultiple": false,
+      "encrypt": false,
+      "required": true,
+      "hidden": false
+    }
+  ]
+}
