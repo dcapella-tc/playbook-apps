@@ -1,6 +1,6 @@
 {
   "package": {
-    "app_name": "TCPB_-_Utility_Template",
+    "app_name": "TCPB_-_CSV_Fileshare",
     "excludes": [
       ".gitignore",
       ".pre-commit-config.yaml",
