@@ -1,0 +1,51 @@
+{
+  "allowOnDemand": true,
+  "appId": "230b94ee-2144-588c-94b7-711724ab1d75",
+  "category": "Utility",
+  "displayName": "CSV Fileshare",
+  "features": [
+    "aotExecutionEnabled",
+    "appBuilderCompliant",
+    "fileParams",
+    "redisPasswordSupport",
+    "runtimeVariables"
+  ],
+  "languageVersion": "3.11",
+  "listDelimiter": "|",
+  "minServerVersion": "7.2.0",
+  "note": "Accepts CSV text and writes data.csv to ThreatConnect fileshare output (publishOutFiles) for HTTP access.\n",
+  "params": [
+    {
+      "label": "CSV Data",
+      "name": "csv_data",
+      "note": "Raw CSV body to publish as data.csv on fileshare.",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 1,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ],
+      "viewRows": 6
+    }
+  ],
+  "playbook": {
+    "outputVariables": [
+      {
+        "name": "csv.filename",
+        "type": "String"
+      }
+    ],
+    "type": "Utility"
+  },
+  "programLanguage": "PYTHON",
+  "programMain": "run.py",
+  "programVersion": "0.1.0",
+  "publishOutFiles": [
+    "data.csv"
+  ],
+  "runtimeLevel": "Playbook",
+  "sdkVersion": "4.0.0"
+}
