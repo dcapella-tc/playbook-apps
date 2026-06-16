@@ -1,7 +1,7 @@
 """App Inputs"""
 # pyright: reportGeneralTypeIssues=false
 
-from tcex.input.field_type import KeyValue, TCEntity
+from tcex.input.field_type import String
 from tcex.input.input import Input
 from tcex.input.model.app_playbook_model import AppPlaybookModel
 
@@ -9,12 +9,9 @@ from tcex.input.model.app_playbook_model import AppPlaybookModel
 class AppBaseModel(AppPlaybookModel):
     """Base model for the App containing any common inputs."""
 
-    # pbd: String, vv: ${TEXT}
-    indent: int = 4
-    # pbd: KeyValue|KeyValueArray|String|StringArray|TCEntity|TCEntityArray, vv:
-    # ${TEXT}
-    json_data: KeyValue | list[KeyValue] | str | list[str] | TCEntity | list[TCEntity]
-    sort_keys: bool = False
+    cve: String
+    qualys_username: String
+    qualys_api_key: String
 
 
 class AppInputs:

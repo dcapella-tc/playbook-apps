@@ -1,9 +1,10 @@
 {
   "package": {
-    "app_name": "TCPB_-_Utility_Template",
+    "app_name": "Qualys_CVE_Enrichment",
     "excludes": [
       ".gitignore",
       ".pre-commit-config.yaml",
+      "app_inputs.json",
       "app_spec.yaml",
       "local-*",
       "pyproject.toml"

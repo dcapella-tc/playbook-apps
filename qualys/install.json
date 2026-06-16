@@ -28,6 +28,35 @@
       "validValues": [
         "${TEXT}"
       ]
+    },
+    {
+      "label": "Qualys Username",
+      "name": "qualys_username",
+      "note": "Qualys API username.",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 2,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ]
+    },
+    {
+      "encrypt": true,
+      "label": "Qualys API Key",
+      "name": "qualys_api_key",
+      "note": "Qualys API key (password).",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 3,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ]
     }
   ],
   "playbook": {
