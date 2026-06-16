@@ -62,7 +62,7 @@
       "default": "https://qualysapi.qg3.apps.qualys.com",
       "label": "Qualys Base URL",
       "name": "qualys_base_url",
-      "note": "Qualys API platform URL. Use qualysapi (not qualysguard). US Platform 3: https://qualysapi.qg3.apps.qualys.com",
+      "note": "Qualys API server URL (qualysapi, not qualysguard). JWT auth uses the corresponding gateway host automatically. US Platform 3: https://qualysapi.qg3.apps.qualys.com",
       "playbookDataType": [
         "String"
       ],
