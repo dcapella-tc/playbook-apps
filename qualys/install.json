@@ -59,10 +59,10 @@
       ]
     },
     {
-      "default": "https://qualysapi.qualys.com",
+      "default": "https://qualysapi.qg3.apps.qualys.com",
       "label": "Qualys Base URL",
       "name": "qualys_base_url",
-      "note": "Qualys API platform URL (e.g. https://qualysapi.qualys.com).",
+      "note": "Qualys API platform URL. Use qualysapi (not qualysguard). US Platform 3: https://qualysapi.qg3.apps.qualys.com",
       "playbookDataType": [
         "String"
       ],

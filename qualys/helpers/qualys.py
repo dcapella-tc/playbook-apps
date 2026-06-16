@@ -9,7 +9,7 @@ def get_qualys_cve_data(base_url: str, jwt_token: str, cve: str) -> str:
     """Fetch raw KnowledgeBase vulnerability data for a CVE.
 
     Args:
-        base_url: Qualys platform base URL (e.g. https://qualysapi.qualys.com).
+        base_url: Qualys platform base URL (e.g. https://qualysapi.qg3.apps.qualys.com).
         jwt_token: Bearer JWT for Qualys API authentication.
         cve: CVE identifier (e.g. CVE-2024-1234).
 
@@ -34,7 +34,7 @@ def get_qualys_token(base_url: str, username: str, api_key: str) -> str:
     """Authenticate to Qualys and return a bearer token/JWT.
 
     Args:
-        base_url: Qualys platform base URL (e.g. https://qualysapi.qualys.com).
+        base_url: Qualys platform base URL (e.g. https://qualysapi.qg3.apps.qualys.com).
         username: Qualys API username.
         api_key: Qualys API key (sent as the password form field).
 
