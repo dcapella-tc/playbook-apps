@@ -12,6 +12,7 @@ class AppBaseModel(AppPlaybookModel):
     cve: String
     qualys_username: String
     qualys_api_key: String
+    qualys_base_url: String
 
 
 class AppInputs:

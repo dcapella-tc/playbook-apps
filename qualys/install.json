@@ -57,6 +57,21 @@
       "validValues": [
         "${TEXT}"
       ]
+    },
+    {
+      "default": "https://qualysapi.qualys.com",
+      "label": "Qualys Base URL",
+      "name": "qualys_base_url",
+      "note": "Qualys API platform URL (e.g. https://qualysapi.qualys.com).",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 4,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ]
     }
   ],
   "playbook": {

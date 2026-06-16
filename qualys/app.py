@@ -1,10 +1,10 @@
 """ThreatConnect Playbook App"""
 
-import json
-from typing import cast
-
+import requests
 from tcex import TcEx
+from tcex.exit import ExitCode
 
+from helpers.qualys import get_qualys_cve_data, get_qualys_token
 from playbook_app import PlaybookApp  # Import default Playbook App Class (Required)
 
 
@@ -17,37 +17,32 @@ class App(PlaybookApp):
         This method can be OPTIONALLY overridden.
         """
         super().__init__(_tcex)
-        self.pretty_json: str
+        self.qualys_cve_data: str
 
     def run(self):
         """Run the App main logic.
 
         This method should contain the core logic of the App.
         """
-        # use the unresolved version of the input variable
-        # so that tcex does not convert the JSON to a dict.
-        json_data = cast('str', self.in_unresolved.json_data)  # type: ignore
-
-        # get the playbook variable type
-        json_data_type = self.playbook.get_variable_type(json_data)
-
-        # convert string input to dict
         try:
-            if json_data_type in ['String']:
-                json_data = json.loads(self.in_.json_data)  # type: ignore
-        except ValueError:
-            self.tcex.exit.exit(1, 'Failed parsing JSON data.')
-
-        # generate the new "pretty" json (this will be used as an option variable)
-        try:
-            self.pretty_json = json.dumps(
-                json_data, indent=self.in_.indent, sort_keys=self.in_.sort_keys
+            token = get_qualys_token(
+                self.in_.qualys_base_url,
+                self.in_.qualys_username,
+                self.in_.qualys_api_key,
             )
-        except ValueError:
-            self.tcex.exit.exit(1, 'Failed parsing JSON data.')
+            self.qualys_cve_data = get_qualys_cve_data(
+                self.in_.qualys_base_url,
+                token,
+                self.in_.cve,
+            )
+        except requests.HTTPError:
+            self.log.exception('Qualys API request failed.')
+            self.tcex.exit.exit(ExitCode.FAILURE, 'Qualys API request failed.')
+        except requests.RequestException:
+            self.log.exception('Qualys API connection error.')
+            self.tcex.exit.exit(ExitCode.FAILURE, 'Qualys API connection error.')
 
-        # set the App exit message
-        self.exit_message = 'JSON prettified.'
+        self.exit_message = f'Qualys CVE data retrieved for {self.in_.cve}.'
 
     def write_output(self):
         """Write the Playbook output variables.
@@ -56,4 +51,4 @@ class App(PlaybookApp):
         configuration file.
         """
         self.log.info('Writing Output')
-        self.playbook.create.string('json.pretty', self.pretty_json)
+        self.playbook.create.string('qualys.cve.data', self.qualys_cve_data)
