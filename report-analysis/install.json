@@ -2,7 +2,7 @@
   "allowOnDemand": true,
   "appId": "6e26ba55-0300-5462-aca7-ea049494c8a5",
   "category": "Utility",
-  "displayName": "Example Basic Playbook App",
+  "displayName": "Report Analysis",
   "features": [
     "aotExecutionEnabled",
     "appBuilderCompliant",
@@ -13,7 +13,54 @@
   "languageVersion": "3.11",
   "listDelimiter": "|",
   "minServerVersion": "7.2.0",
-  "note": "A template that provides the structure for a Playbook App without any App logic.\n",
+  "note": "Parse report content via JMESPath and Doc Analysis, then create or update a ThreatConnect Report and associated indicators.\n",
+  "params": [
+    {
+      "label": "Owner Name",
+      "name": "owner_name",
+      "note": "ThreatConnect owner for the report and indicators.",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 1,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ],
+      "viewRows": 1
+    },
+    {
+      "label": "Report Name",
+      "name": "report_name",
+      "note": "Name of the ThreatConnect Report group to create or update.",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 2,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ],
+      "viewRows": 1
+    },
+    {
+      "label": "content",
+      "name": "content",
+      "note": "Raw report content (typically JSON) to preprocess and analyze.",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 3,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ],
+      "viewRows": 6
+    }
+  ],
   "playbook": {
     "type": "Utility"
   },
