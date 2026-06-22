@@ -1,18 +1,24 @@
-"""Step 2: Doc Analysis (stub)."""
+"""Step 1: Doc Analysis."""
 
 from __future__ import annotations
 
-from typing import Any
+from models.doc_analysis_result import DocAnalysisResult
 
 
-def doc_analysis(data: dict[str, Any]) -> dict[str, Any]:
-    """Analyze document content and enrich the parsed payload.
+def doc_analysis(content: str) -> DocAnalysisResult:
+    """Analyze document content and extract enrichment data.
 
     Args:
-        data: Preprocessed report data from step 1.
+        content: Raw report content from the playbook input.
 
     Returns:
-        Analyzed report data. Currently a pass-through stub.
+        Enrichment data for the Report (description, tags, associations).
+
+    Raises:
+        ValueError: If content is empty.
     """
+    if not content or not str(content).strip():
+        raise ValueError('content input is empty.')
+
     # TODO: integrate Doc Analysis service or local parsing logic.
-    return data
+    return DocAnalysisResult()

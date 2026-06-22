@@ -6,12 +6,8 @@ from tcex import TcEx
 from tcex.exit import ExitCode
 
 from helpers.doc_analysis import doc_analysis
-from helpers.jmespath_indicator import jmespath_indicator
-from helpers.jmespath_postprocess import jmespath_postprocess
-from helpers.jmespath_preprocess import jmespath_preprocess
-from helpers.tc_create_indicator import create_indicator
+from helpers.enrich_report import enrich_report
 from helpers.tc_create_report import create_report
-from helpers.tc_update_report import update_report
 from playbook_app import PlaybookApp
 
 
@@ -30,30 +26,19 @@ class App(PlaybookApp):
         """
         try:
             content = cast('str', self.in_unresolved.content)
-            preprocessed = jmespath_preprocess(content)
-            analyzed = doc_analysis(preprocessed)
-            report_payload = jmespath_postprocess(analyzed)
+            analysis = doc_analysis(content)
             report = create_report(
-                self.tcex,
+                self.batch,
                 self.in_.owner_name,
                 self.in_.report_name,
-                report_payload,
             )
-            update_report(
-                self.tcex,
+            enrich_report(
+                self.batch,
                 self.in_.owner_name,
                 report,
-                report_payload,
+                analysis,
             )
-
-            for indicator_raw in report_payload.get('indicators', []):
-                indicator_data = jmespath_indicator(indicator_raw)
-                create_indicator(
-                    self.tcex,
-                    self.in_.owner_name,
-                    indicator_data,
-                    report['xid'],
-                )
+            # TODO: self.batch.submit_all() + error handling
         except ValueError as exc:
             self.log.exception('Report analysis failed.')
             self.tcex.exit.exit(ExitCode.FAILURE, str(exc))

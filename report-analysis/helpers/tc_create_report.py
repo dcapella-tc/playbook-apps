@@ -1,29 +1,27 @@
-"""Step 4: Create ThreatConnect Report."""
+"""Step 2: Create ThreatConnect Report."""
 
 from __future__ import annotations
 
-from typing import Any
+from tcex.api.tc.v2.batch.batch_writer import BatchWriter
 
-from tcex import TcEx
+from models.report import Report
 
 
 def create_report(
-    tcex: TcEx,
+    batch: BatchWriter,
     owner_name: str,
     report_name: str,
-    report_data: dict[str, Any],
-) -> dict[str, Any]:
+) -> Report:
     """Create a ThreatConnect Report group.
 
     Args:
-        tcex: TcEx application instance.
+        batch: TcEx batch writer for the target owner.
         owner_name: ThreatConnect owner name.
         report_name: Report group name.
-        report_data: Shaped report payload from postprocess step.
 
     Returns:
-        Created report metadata including ``xid`` and ``name``.
+        Created report metadata.
     """
-    # TODO: build and save a Report group via tcex.api.tc.v2.batch.
-    _ = (tcex, owner_name, report_data)
-    return {'xid': 'stub-report-xid', 'name': report_name, 'type': 'Report'}
+    xid = batch.generate_xid([owner_name, 'Report', report_name])
+    # TODO: batch.group('Report', report_name, xid=xid) + batch.save(...)
+    return Report(owner_name=owner_name, name=report_name, xid=xid)
