@@ -1,0 +1,91 @@
+{
+  "allowOnDemand": true,
+  "appId": "230b94ee-2144-588c-94b7-711724ab1d75",
+  "category": "Unsupported",
+  "displayName": "Qualys CVE Enrichment",
+  "features": [
+    "aotExecutionEnabled",
+    "appBuilderCompliant",
+    "fileParams",
+    "redisPasswordSupport",
+    "runtimeVariables"
+  ],
+  "languageVersion": "3.11",
+  "listDelimiter": "|",
+  "minServerVersion": "7.2.0",
+  "note": "Qualys CVE Enrichment",
+  "params": [
+    {
+      "label": "CVE",
+      "name": "cve",
+      "note": "The CVE to be enriched from Qualys.",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 1,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ]
+    },
+    {
+      "label": "Qualys Username",
+      "name": "qualys_username",
+      "note": "Qualys API username.",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 2,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ]
+    },
+    {
+      "encrypt": true,
+      "label": "Qualys API Key",
+      "name": "qualys_api_key",
+      "note": "Qualys API key (password).",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 3,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ]
+    },
+    {
+      "default": "https://qualysapi.qg3.apps.qualys.com",
+      "label": "Qualys Base URL",
+      "name": "qualys_base_url",
+      "note": "Qualys API server URL (qualysapi, not qualysguard). JWT auth uses the corresponding gateway host automatically. US Platform 3: https://qualysapi.qg3.apps.qualys.com",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 4,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ]
+    }
+  ],
+  "playbook": {
+    "outputVariables": [
+      {
+        "name": "qualys.cve.data",
+        "type": "String"
+      }
+    ],
+    "type": "Unsupported"
+  },
+  "programLanguage": "PYTHON",
+  "programMain": "run.py",
+  "programVersion": "1.0.0",
+  "runtimeLevel": "Playbook",
+  "sdkVersion": "4.0.0"
+}
