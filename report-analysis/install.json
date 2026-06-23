@@ -14,7 +14,7 @@
   "languageVersion": "3.11",
   "listDelimiter": "|",
   "minServerVersion": "7.2.0",
-  "note": "Analyze plain-text report content via CAL Document Analysis, then create or update a ThreatConnect Report with extracted enrichment.\n",
+  "note": "Beta. Analyze plain-text report content via CAL Document Analysis, then create or update a ThreatConnect Report with extracted enrichment.\n",
   "params": [
     {
       "label": "Owner Name",
@@ -81,7 +81,7 @@
   },
   "programLanguage": "PYTHON",
   "programMain": "run.py",
-  "programVersion": "1.1.0",
+  "programVersion": "0.1.0-beta",
   "runtimeLevel": "Playbook",
   "sdkVersion": "4.0.1"
 }

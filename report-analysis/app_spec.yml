@@ -12,8 +12,8 @@ features:
 languageVersion: '3.11'
 listDelimiter: '|'
 minServerVersion: 7.2.0
-note: Analyze plain-text report content via CAL Document Analysis, then create
-  or update a ThreatConnect Report with extracted enrichment.
+note: Beta. Analyze plain-text report content via CAL Document Analysis, then
+  create or update a ThreatConnect Report with extracted enrichment.
 outputData:
 - display: '1'
   outputVariables:
@@ -24,14 +24,11 @@ packageName: TCPB_-_Report_Analysis
 playbook: {}
 programLanguage: PYTHON
 programMain: run.py
-programVersion: 1.1.0
+programVersion: 0.1.0-beta
 releaseNotes:
 - notes:
-  - Add playbook outputs report.xid, report.indicators.count, and report.groups.count.
-  version: 1.1.0
-- notes:
-  - Initial skeleton release.
-  version: 1.0.0
+  - Beta release. CAL Document Analysis, Report create/enrich via batch API, playbook outputs.
+  version: 0.1.0-beta
 runtimeLevel: Playbook
 schemaVersion: 1.1.0
 sdkVersion: 4.0.1
