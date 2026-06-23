@@ -4,6 +4,7 @@
   "category": "Utility",
   "displayName": "Report Analysis",
   "features": [
+    "CALSettings",
     "aotExecutionEnabled",
     "appBuilderCompliant",
     "fileParams",
@@ -13,7 +14,7 @@
   "languageVersion": "3.11",
   "listDelimiter": "|",
   "minServerVersion": "7.2.0",
-  "note": "Parse report content via JMESPath and Doc Analysis, then create or update a ThreatConnect Report and associated indicators.\n",
+  "note": "Analyze plain-text report content via CAL Document Analysis, then create or update a ThreatConnect Report with extracted enrichment.\n",
   "params": [
     {
       "label": "Owner Name",
@@ -48,7 +49,7 @@
     {
       "label": "content",
       "name": "content",
-      "note": "Raw report content (typically JSON) to preprocess and analyze.",
+      "note": "Plain-text report content sent to CAL Document Analysis for enrichment.",
       "playbookDataType": [
         "String"
       ],

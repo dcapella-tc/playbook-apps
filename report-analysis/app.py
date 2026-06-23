@@ -2,6 +2,7 @@
 
 from typing import cast
 
+import requests
 from tcex import TcEx
 from tcex.exit import ExitCode
 
@@ -26,7 +27,15 @@ class App(PlaybookApp):
         """
         try:
             content = cast('str', self.in_unresolved.content)
-            analysis = doc_analysis(content)
+            with self.tcex.session.external as session:
+                analysis = doc_analysis(
+                    content,
+                    session=session,
+                    cal_host=self.in_.tc_cal_host,
+                    cal_token=str(self.in_.tc_cal_token),
+                    cal_timestamp=self.in_.tc_cal_timestamp,
+                    resolve_mitre_tag=self.tcex.api.tc.v3.mitre_tags.get_by_id,
+                )
             report = create_report(
                 self.batch,
                 self.in_.owner_name,
@@ -42,6 +51,9 @@ class App(PlaybookApp):
         except ValueError as exc:
             self.log.exception('Report analysis failed.')
             self.tcex.exit.exit(ExitCode.FAILURE, str(exc))
+        except requests.RequestException as exc:
+            self.log.exception('CAL request failed.')
+            self.tcex.exit.exit(ExitCode.FAILURE, f'CAL request failed: {exc}')
 
         self.exit_message = f'Report {self.in_.report_name} processed.'
 

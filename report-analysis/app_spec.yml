@@ -3,6 +3,7 @@ appId: 6e26ba55-0300-5462-aca7-ea049494c8a5
 category: Utility
 displayName: Report Analysis
 features:
+- CALSettings
 - aotExecutionEnabled
 - appBuilderCompliant
 - fileParams
@@ -11,8 +12,8 @@ features:
 languageVersion: '3.11'
 listDelimiter: '|'
 minServerVersion: 7.2.0
-note: Parse report content via JMESPath and Doc Analysis, then create or update a
-  ThreatConnect Report and associated indicators.
+note: Analyze plain-text report content via CAL Document Analysis, then create
+  or update a ThreatConnect Report with extracted enrichment.
 outputData: []
 packageName: TCPB_-_Report_Analysis
 playbook: {}
@@ -48,7 +49,7 @@ sections:
     viewRows: 1
   - label: content
     name: content
-    note: Raw report content (typically JSON) to preprocess and analyze.
+    note: Plain-text report content sent to CAL Document Analysis for enrichment.
     playbookDataType:
     - String
     required: true
