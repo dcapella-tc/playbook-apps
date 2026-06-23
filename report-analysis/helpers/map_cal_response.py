@@ -27,6 +27,8 @@ GROUP_TYPE_MAP = {
     'malware': 'Malware',
     'intrusion set': 'Intrusion Set',
     'tools': 'Tool',
+    'tactic': 'Tactic',
+    'course of action': 'Course of Action',
 }
 
 _MD5_PATTERN = re.compile(r'^[a-fA-F0-9]{32}$')
@@ -49,6 +51,20 @@ def _collect_industries(row: dict[str, Any]) -> list[str]:
     if isinstance(industry, str):
         return [industry] if industry.strip() else []
     return [str(item) for item in industry if str(item).strip()]
+
+
+def _group_from_row(row: dict[str, Any]) -> AssociatedGroup | None:
+    object_type = row.get('objectType') or ''
+    if object_type == 'vulnerability':
+        cve = row.get('objectId')
+        if cve:
+            return AssociatedGroup(type='Vulnerability', name=str(cve))
+        return None
+    tc_type = GROUP_TYPE_MAP.get(object_type)
+    display_name = row.get('displayName')
+    if tc_type and display_name:
+        return AssociatedGroup(type=tc_type, name=str(display_name))
+    return None
 
 
 def map_cal_response(
@@ -83,13 +99,12 @@ def map_cal_response(
                 seen_tags.add(tag)
                 tags.append(tag)
 
-        group_type = GROUP_TYPE_MAP.get(object_type or '')
-        display_name = row.get('displayName')
-        if group_type and display_name:
-            key = (group_type, display_name)
+        group = _group_from_row(row)
+        if group:
+            key = (group.type, group.name)
             if key not in seen_groups:
                 seen_groups.add(key)
-                associated_groups.append(AssociatedGroup(type=group_type, name=display_name))
+                associated_groups.append(group)
 
         indicator_type_key = row.get('indicatorType')
         unique_id = row.get('uniqueId')
