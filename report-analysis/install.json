@@ -63,11 +63,25 @@
     }
   ],
   "playbook": {
+    "outputVariables": [
+      {
+        "name": "report.xid",
+        "type": "String"
+      },
+      {
+        "name": "report.indicators.count",
+        "type": "String"
+      },
+      {
+        "name": "report.groups.count",
+        "type": "String"
+      }
+    ],
     "type": "Utility"
   },
   "programLanguage": "PYTHON",
   "programMain": "run.py",
-  "programVersion": "1.0.0",
+  "programVersion": "1.1.0",
   "runtimeLevel": "Playbook",
   "sdkVersion": "4.0.1"
 }

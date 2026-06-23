@@ -19,6 +19,9 @@ class App(PlaybookApp):
         """Initialize class properties."""
         super().__init__(_tcex)
         self.batch = self.tcex.api.tc.v2.batch(self.in_.owner_name)
+        self.report_xid: str | None = None
+        self.indicators_count: int = 0
+        self.groups_count: int = 0
 
     def run(self):
         """Run the App main logic.
@@ -41,6 +44,10 @@ class App(PlaybookApp):
                 self.in_.owner_name,
                 self.in_.report_name,
             )
+            self.report_xid = report.xid
+            self.indicators_count = len(analysis.associated_indicators)
+            self.groups_count = len(analysis.associated_groups)
+
             enrich_report(
                 self.batch,
                 self.in_.owner_name,
@@ -78,3 +85,8 @@ class App(PlaybookApp):
         This method should be overridden with the output variables defined in the install.json
         configuration file.
         """
+        self.log.info('Writing Output')
+        if self.report_xid is not None:
+            self.playbook.create.string('report.xid', self.report_xid)
+        self.playbook.create.string('report.indicators.count', self.indicators_count)
+        self.playbook.create.string('report.groups.count', self.groups_count)

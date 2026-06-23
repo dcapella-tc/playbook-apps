@@ -14,13 +14,21 @@ listDelimiter: '|'
 minServerVersion: 7.2.0
 note: Analyze plain-text report content via CAL Document Analysis, then create
   or update a ThreatConnect Report with extracted enrichment.
-outputData: []
+outputData:
+- display: '1'
+  outputVariables:
+  - name: report.xid
+  - name: report.indicators.count
+  - name: report.groups.count
 packageName: TCPB_-_Report_Analysis
 playbook: {}
 programLanguage: PYTHON
 programMain: run.py
-programVersion: 1.0.0
+programVersion: 1.1.0
 releaseNotes:
+- notes:
+  - Add playbook outputs report.xid, report.indicators.count, and report.groups.count.
+  version: 1.1.0
 - notes:
   - Initial skeleton release.
   version: 1.0.0
