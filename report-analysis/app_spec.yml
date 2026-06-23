@@ -24,11 +24,11 @@ packageName: TCPB_-_Report_Analysis
 playbook: {}
 programLanguage: PYTHON
 programMain: run.py
-programVersion: 0.1.0-beta
+programVersion: 0.1.0
 releaseNotes:
 - notes:
   - Beta release. CAL Document Analysis, Report create/enrich via batch API, playbook outputs.
-  version: 0.1.0-beta
+  version: 0.1.0
 runtimeLevel: Playbook
 schemaVersion: 1.1.0
 sdkVersion: 4.0.1

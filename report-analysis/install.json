@@ -81,7 +81,7 @@
   },
   "programLanguage": "PYTHON",
   "programMain": "run.py",
-  "programVersion": "0.1.0-beta",
+  "programVersion": "0.1.0",
   "runtimeLevel": "Playbook",
   "sdkVersion": "4.0.1"
 }

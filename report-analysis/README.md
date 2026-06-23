@@ -2,7 +2,7 @@
 
 ## Release Notes
 
-### 0.1.0-beta
+### 0.1.0
 
 - Beta release: CAL analysis, Report enrichment, batch create/update, playbook outputs.
 
