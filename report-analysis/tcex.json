@@ -5,6 +5,7 @@
       ".gitignore",
       ".pre-commit-config.yaml",
       "app_spec.yaml",
+      "ignore",
       "local-*",
       "pyproject.toml"
     ]
