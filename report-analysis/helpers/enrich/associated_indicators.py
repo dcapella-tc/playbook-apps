@@ -15,8 +15,7 @@ def create_associated_indicators(
     analysis: DocAnalysisResult,
 ) -> None:
     """Create or update associated indicators and link them to the Report."""
-    if not analysis.associated_indicators:
-        return
-
-    # TODO: mirror otx-pb _batch_create_indicators + association to report.xid
-    _ = (batch, owner_name, report)
+    for indicator in analysis.associated_indicators:
+        indicator_batch = batch.indicator(indicator.type, indicator.summary)
+        indicator_batch.association(report.xid)
+        batch.save(indicator_batch)

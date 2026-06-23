@@ -47,7 +47,22 @@ class App(PlaybookApp):
                 report,
                 analysis,
             )
-            # TODO: self.batch.submit_all() + error handling
+
+            batch_response = self.batch.submit_all()
+            self.batch.close()
+
+            errors: list = []
+            successes: list = []
+            for item in batch_response:
+                errors.extend(item.get('errors', []))
+                successes.extend(item.get('successes', []))
+
+            if errors:
+                self.log.error('Batch submission failed with %d errors', len(errors))
+                self.tcex.exit.exit(ExitCode.FAILURE, f'Batch submission failed: {errors[0]}')
+
+            if successes:
+                self.log.info('Batch submission successful with %d items', len(successes))
         except ValueError as exc:
             self.log.exception('Report analysis failed.')
             self.tcex.exit.exit(ExitCode.FAILURE, str(exc))

@@ -23,5 +23,6 @@ def create_report(
         Created report metadata.
     """
     xid = batch.generate_xid([owner_name, 'Report', report_name])
-    # TODO: batch.group('Report', report_name, xid=xid) + batch.save(...)
+    group_batch = batch.group('Report', report_name, xid=xid)
+    batch.save(group_batch)
     return Report(owner_name=owner_name, name=report_name, xid=xid)

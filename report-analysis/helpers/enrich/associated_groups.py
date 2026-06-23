@@ -15,8 +15,8 @@ def create_associated_groups(
     analysis: DocAnalysisResult,
 ) -> None:
     """Create or update associated groups and link them to the Report."""
-    if not analysis.associated_groups:
-        return
-
-    # TODO: mirror otx-pb _batch_create_groups + association to report.xid
-    _ = (batch, owner_name, report)
+    for group in analysis.associated_groups:
+        xid = batch.generate_xid([owner_name, group.type, group.name])
+        group_batch = batch.group(group.type, group.name, xid=xid)
+        group_batch.association(report.xid)
+        batch.save(group_batch)
