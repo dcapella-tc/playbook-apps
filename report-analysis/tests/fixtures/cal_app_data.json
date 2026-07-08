@@ -1,0 +1,11 @@
+[
+  {"app": "TextSummarizer", "summary": "Threat report summary."},
+  {"app": "TextIndustrializer", "industry": ["541512"]},
+  {"indicatorType": "host", "uniqueId": "evil.example.com"},
+  {"objectType": "malware", "displayName": "Emotet"},
+  {"objectType": "attack pattern", "objectId": "T1059", "app": "AttackLabeler"},
+  {"objectType": "vulnerability", "objectId": "CVE-2024-1234"},
+  {"objectType": "tactic", "displayName": "Execution"},
+  {"objectType": "course of action", "displayName": "User Training"},
+  {"indicatorType": "file", "uniqueId": "d41d8cd98f00b204e9800998ecf8427e"}
+]

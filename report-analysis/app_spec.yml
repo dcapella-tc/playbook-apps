@@ -1,0 +1,64 @@
+allowOnDemand: true
+appId: 6e26ba55-0300-5462-aca7-ea049494c8a5
+category: Utility
+displayName: Report Analysis
+features:
+- CALSettings
+- aotExecutionEnabled
+- appBuilderCompliant
+- fileParams
+- redisPasswordSupport
+- runtimeVariables
+languageVersion: '3.11'
+listDelimiter: '|'
+minServerVersion: 7.2.0
+note: Beta. Analyze plain-text report content via CAL Document Analysis, then
+  create or update a ThreatConnect Report with extracted enrichment.
+outputData:
+- display: '1'
+  outputVariables:
+  - name: report.xid
+  - name: report.indicators.count
+  - name: report.groups.count
+packageName: TCPB_-_Report_Analysis
+playbook: {}
+programLanguage: PYTHON
+programMain: run.py
+programVersion: 0.1.0
+releaseNotes:
+- notes:
+  - Beta release. CAL Document Analysis, Report create/enrich via batch API, playbook outputs.
+  version: 0.1.0
+runtimeLevel: Playbook
+schemaVersion: 1.1.0
+sdkVersion: 4.0.1
+sections:
+- params:
+  - label: Owner Name
+    name: owner_name
+    note: ThreatConnect owner for the report and indicators.
+    playbookDataType:
+    - String
+    required: true
+    validValues:
+    - ${TEXT}
+    viewRows: 1
+  - label: Report Name
+    name: report_name
+    note: Name of the ThreatConnect Report group to create or update.
+    playbookDataType:
+    - String
+    required: true
+    validValues:
+    - ${TEXT}
+    viewRows: 1
+  - label: content
+    name: content
+    note: Plain-text report content sent to CAL Document Analysis for enrichment.
+    playbookDataType:
+    - String
+    required: true
+    validValues:
+    - ${TEXT}
+    viewRows: 6
+  sectionName: Inputs
