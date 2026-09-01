@@ -1,6 +1,6 @@
 {
   "package": {
-    "app_name": "TCPB_-_Basic_Template",
+    "app_name": "TCPB_-_RF_Retro_Update_Confidence",
     "excludes": [
       ".gitignore",
       ".pre-commit-config.yaml",

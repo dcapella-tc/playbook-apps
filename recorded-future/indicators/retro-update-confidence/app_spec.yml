@@ -1,7 +1,7 @@
 allowOnDemand: true
-appId: 6e26ba55-0300-5462-aca7-ea049494c8a5
+appId: 6e0cebfa-24df-4a00-b75f-2395ce08500c
 category: Utility
-displayName: Example Basic Playbook App
+displayName: RF Retro Update Confidence
 features:
 - aotExecutionEnabled
 - appBuilderCompliant
@@ -11,20 +11,36 @@ features:
 languageVersion: '3.11'
 listDelimiter: '|'
 minServerVersion: 7.2.0
-note: A template that provides the structure for a Playbook App without any App logic.
-outputData: []
-packageName: TCPB_-_Basic_Template
+note: Retrieve indicators matching a TQL query and set each indicator's confidence
+  to the integer value of its Risk List attribute.
+outputData:
+- display: '1'
+  outputVariables:
+  - name: indicators.updated
+  - name: indicators.skipped
+  - name: indicators.failed
+packageName: TCPB_-_RF_Retro_Update_Confidence
 playbook: {}
 programLanguage: PYTHON
 programMain: run.py
 programVersion: 1.0.0
 releaseNotes:
 - notes:
-  - Initial Release
+  - Initial release. Paginate TQL indicators and update confidence from Risk List.
   version: 1.0.0
 runtimeLevel: Playbook
 schemaVersion: 1.1.0
 sdkVersion: 4.0.1
 sections:
-- params: []
+- params:
+  - label: TQL
+    name: tql
+    note: ThreatConnect Query Language used to select indicators. Include ownerName
+      in the TQL when the job should be owner-scoped.
+    playbookDataType:
+    - String
+    required: true
+    validValues:
+    - ${TEXT}
+    viewRows: 4
   sectionName: Inputs

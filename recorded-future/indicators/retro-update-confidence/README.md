@@ -1,17 +1,34 @@
-# Example Basic Playbook App
+# RF Retro Update Confidence
 
 ## Release Notes
 
 ### 1.0.0
 
--   Initial Release
+- Initial release: paginate TQL indicators and update confidence from Risk List.
 
-# Category
+## Category
 
--   Utility
+- Utility
 
-# Description
+## Description
 
-A template that provides the structure for a Playbook App without any App logic.
+Retrieves all indicators matching an input TQL query, paginates the ThreatConnect
+v3 results, and sets each indicator's confidence to the integer value of its
+`Risk List` attribute.
 
-# Inputs
+Indicators without a valid `Risk List` value (missing, not an integer, or outside
+0-100) are skipped. Indicators whose confidence already matches are skipped.
+Individual update failures are counted and do not stop the job.
+
+## Inputs
+
+### TQL (String, required)
+
+ThreatConnect Query Language used to select indicators. Include `ownerName` in
+the TQL when the job should be owner-scoped.
+
+## Outputs
+
+- `indicators.updated` (String) — indicators whose confidence was updated
+- `indicators.skipped` (String) — missing/invalid Risk List, or confidence already equal
+- `indicators.failed` (String) — indicators whose confidence update failed

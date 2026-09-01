@@ -1,8 +1,8 @@
 {
   "allowOnDemand": true,
-  "appId": "6e26ba55-0300-5462-aca7-ea049494c8a5",
+  "appId": "6e0cebfa-24df-4a00-b75f-2395ce08500c",
   "category": "Utility",
-  "displayName": "Example Basic Playbook App",
+  "displayName": "RF Retro Update Confidence",
   "features": [
     "aotExecutionEnabled",
     "appBuilderCompliant",
@@ -13,8 +13,39 @@
   "languageVersion": "3.11",
   "listDelimiter": "|",
   "minServerVersion": "7.2.0",
-  "note": "A template that provides the structure for a Playbook App without any App logic.\n",
+  "note": "Retrieve indicators matching a TQL query and set each indicator's confidence to the integer value of its Risk List attribute.\n",
+  "params": [
+    {
+      "label": "TQL",
+      "name": "tql",
+      "note": "ThreatConnect Query Language used to select indicators. Include ownerName in the TQL when the job should be owner-scoped.",
+      "playbookDataType": [
+        "String"
+      ],
+      "required": true,
+      "sequence": 1,
+      "type": "String",
+      "validValues": [
+        "${TEXT}"
+      ],
+      "viewRows": 4
+    }
+  ],
   "playbook": {
+    "outputVariables": [
+      {
+        "name": "indicators.updated",
+        "type": "String"
+      },
+      {
+        "name": "indicators.skipped",
+        "type": "String"
+      },
+      {
+        "name": "indicators.failed",
+        "type": "String"
+      }
+    ],
     "type": "Utility"
   },
   "programLanguage": "PYTHON",
