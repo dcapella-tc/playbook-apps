@@ -1,7 +1,7 @@
 """App Inputs"""
 # pyright: reportGeneralTypeIssues=false
 
-from tcex.input.field_type import String
+from tcex.input.field_type import String, integer
 from tcex.input.input import Input
 from tcex.input.model.app_playbook_model import AppPlaybookModel
 
@@ -10,6 +10,7 @@ class AppBaseModel(AppPlaybookModel):
     """Base model for the App containing any common inputs."""
 
     tql: String
+    limit: integer(ge=1)
 
 
 class AppInputs:

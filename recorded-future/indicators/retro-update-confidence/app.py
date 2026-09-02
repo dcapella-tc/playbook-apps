@@ -2,13 +2,19 @@
 
 from __future__ import annotations
 
+from itertools import islice
 from typing import Any
 
 import requests
 from tcex import TcEx
 from tcex.exit import ExitCode
 
-from helpers.indicators import iter_indicators, risk_score_confidence, update_confidence
+from helpers.indicators import (
+    RESULT_LIMIT,
+    iter_indicators,
+    risk_score_confidence,
+    update_confidence,
+)
 from playbook_app import PlaybookApp
 
 
@@ -31,9 +37,15 @@ class App(PlaybookApp):
         if not tql:
             self.tcex.exit.exit(ExitCode.FAILURE, 'TQL input is required.')
 
+        limit = int(self.in_.limit)
+        page_size = min(limit, RESULT_LIMIT)
+
         try:
             with self.tcex.session.tc as session:
-                for indicator in iter_indicators(session, tql):
+                for indicator in islice(
+                    iter_indicators(session, tql, result_limit=page_size),
+                    limit,
+                ):
                     self._update_indicator(session, indicator)
         except requests.RequestException as exc:
             self.log.exception('Failed to retrieve indicators.')

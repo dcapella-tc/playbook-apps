@@ -27,6 +27,7 @@ programVersion: 1.0.0
 releaseNotes:
 - notes:
   - Initial release. Paginate TQL indicators and update confidence from Risk Score.
+    Limit how many matching indicators are processed per run.
   version: 1.0.0
 runtimeLevel: Playbook
 schemaVersion: 1.1.0
@@ -43,4 +44,13 @@ sections:
     validValues:
     - ${TEXT}
     viewRows: 4
+  - label: Max Indicators
+    name: limit
+    note: Maximum number of TQL-matched indicators to process in this run, including
+      skips. Remaining matches are left for a later run.
+    playbookDataType:
+    - String
+    required: true
+    validValues:
+    - ${TEXT}
   sectionName: Inputs

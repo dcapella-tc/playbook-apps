@@ -9,10 +9,10 @@ from tcex.exit import ExitCode
 from app import App
 
 
-def _build_app(tql: str = 'typeName = "Address"') -> App:
+def _build_app(tql: str = 'typeName = "Address"', limit: int = 1000) -> App:
     tcex = MagicMock()
     tcex.inputs.model_unresolved = MagicMock()
-    tcex.inputs.model = MagicMock(tql=tql)
+    tcex.inputs.model = MagicMock(tql=tql, limit=limit)
     with patch('playbook_app.AppInputs') as mock_app_inputs:
         mock_app_inputs.return_value.update_inputs.return_value = None
         return App(tcex)
@@ -94,3 +94,28 @@ def test_run_get_failure_exits():
 
     app.tcex.exit.exit.assert_called_once()
     assert 'Failed to retrieve indicators' in app.tcex.exit.exit.call_args.args[1]
+
+
+def test_run_stops_after_limit():
+    app = _build_app(limit=2)
+    session = MagicMock()
+    app.tcex.session.tc.__enter__.return_value = session
+    session.put.return_value = MagicMock()
+
+    indicators = [
+        _indicator(1, 10, risk_score='80'),
+        _indicator(2, 25, risk_score='25'),
+        _indicator(3, 10, risk_score='90'),
+        _indicator(4, 10, risk_score='91'),
+        _indicator(5, 10, risk_score='92'),
+    ]
+
+    with patch('app.iter_indicators', return_value=indicators) as mock_iter:
+        app.run()
+
+    assert app.updated_count == 1
+    assert app.skipped_count == 1
+    assert app.failed_count == 0
+    session.put.assert_called_once_with('/v3/indicators/1', json={'confidence': 80})
+    mock_iter.assert_called_once()
+    assert mock_iter.call_args.kwargs['result_limit'] == 2
