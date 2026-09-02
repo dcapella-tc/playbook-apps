@@ -8,7 +8,7 @@ import requests
 from helpers.indicators import (
     RESULT_LIMIT,
     iter_indicators,
-    risk_list_confidence,
+    risk_score_confidence,
     update_confidence,
 )
 
@@ -55,33 +55,33 @@ def test_iter_indicators_get_failure_raises():
         list(iter_indicators(session, 'typeName = "Address"'))
 
 
-def test_risk_list_confidence_parses_nested_attribute():
+def test_risk_score_confidence_parses_nested_attribute():
     indicator = {
         'attributes': {
             'data': [
                 {'type': 'Description', 'value': 'noise'},
-                {'type': 'Risk List', 'value': '85'},
+                {'type': 'Risk Score', 'value': '85'},
             ]
         }
     }
-    assert risk_list_confidence(indicator) == 85
+    assert risk_score_confidence(indicator) == 85
 
 
-def test_risk_list_confidence_uses_first_risk_list():
+def test_risk_score_confidence_uses_first_risk_score():
     indicator = {
         'attributes': {
             'data': [
-                {'type': 'Risk List', 'value': '10'},
-                {'type': 'Risk List', 'value': '90'},
+                {'type': 'Risk Score', 'value': '10'},
+                {'type': 'Risk Score', 'value': '90'},
             ]
         }
     }
-    assert risk_list_confidence(indicator) == 10
+    assert risk_score_confidence(indicator) == 10
 
 
-def test_risk_list_confidence_missing_returns_none():
-    assert risk_list_confidence({'attributes': {'data': []}}) is None
-    assert risk_list_confidence({}) is None
+def test_risk_score_confidence_missing_returns_none():
+    assert risk_score_confidence({'attributes': {'data': []}}) is None
+    assert risk_score_confidence({}) is None
 
 
 @pytest.mark.parametrize(
@@ -95,9 +95,9 @@ def test_risk_list_confidence_missing_returns_none():
         (50, 50),
     ],
 )
-def test_risk_list_confidence_invalid_and_boundary_values(value, expected):
-    indicator = {'attributes': {'data': [{'type': 'Risk List', 'value': value}]}}
-    assert risk_list_confidence(indicator) == expected
+def test_risk_score_confidence_invalid_and_boundary_values(value, expected):
+    indicator = {'attributes': {'data': [{'type': 'Risk Score', 'value': value}]}}
+    assert risk_score_confidence(indicator) == expected
 
 
 def test_update_confidence_puts_confidence_body():

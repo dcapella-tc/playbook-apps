@@ -18,10 +18,10 @@ def _build_app(tql: str = 'typeName = "Address"') -> App:
         return App(tcex)
 
 
-def _indicator(indicator_id, confidence, risk_list=None, summary=None):
+def _indicator(indicator_id, confidence, risk_score=None, summary=None):
     attributes = []
-    if risk_list is not None:
-        attributes.append({'type': 'Risk List', 'value': risk_list})
+    if risk_score is not None:
+        attributes.append({'type': 'Risk Score', 'value': risk_score})
     return {
         'id': indicator_id,
         'summary': summary or f'ioc-{indicator_id}',
@@ -64,10 +64,10 @@ def test_run_updates_skips_and_counts_put_failures():
     session.put.side_effect = [put_ok, put_fail]
 
     indicators = [
-        _indicator(1, 10, risk_list='80'),
-        _indicator(2, 25, risk_list='25'),
+        _indicator(1, 10, risk_score='80'),
+        _indicator(2, 25, risk_score='25'),
         _indicator(3, 10),
-        _indicator(4, 10, risk_list='90'),
+        _indicator(4, 10, risk_score='90'),
     ]
 
     with patch('app.iter_indicators', return_value=indicators):

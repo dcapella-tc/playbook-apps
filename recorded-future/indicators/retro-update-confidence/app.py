@@ -8,7 +8,7 @@ import requests
 from tcex import TcEx
 from tcex.exit import ExitCode
 
-from helpers.indicators import iter_indicators, risk_list_confidence, update_confidence
+from helpers.indicators import iter_indicators, risk_score_confidence, update_confidence
 from playbook_app import PlaybookApp
 
 
@@ -25,7 +25,7 @@ class App(PlaybookApp):
     def run(self):
         """Run the App main logic.
 
-        Retrieve TQL-matched indicators and set confidence from Risk List.
+        Retrieve TQL-matched indicators and set confidence from Risk Score.
         """
         tql = str(self.in_.tql or '').strip()
         if not tql:
@@ -45,13 +45,13 @@ class App(PlaybookApp):
         )
 
     def _update_indicator(self, session: requests.Session, indicator: dict[str, Any]) -> None:
-        """Update one indicator's confidence from its Risk List attribute."""
+        """Update one indicator's confidence from its Risk Score attribute."""
         indicator_id = indicator.get('id')
         summary = indicator.get('summary', indicator_id)
-        confidence = risk_list_confidence(indicator)
+        confidence = risk_score_confidence(indicator)
         if confidence is None:
             self.log.info(
-                'Skipping indicator %s: missing or invalid Risk List attribute',
+                'Skipping indicator %s: missing or invalid Risk Score attribute',
                 summary,
             )
             self.skipped_count += 1

@@ -4,7 +4,7 @@
 
 ### 1.0.0
 
-- Initial release: paginate TQL indicators and update confidence from Risk List.
+- Initial release: paginate TQL indicators and update confidence from Risk Score.
 
 ## Category
 
@@ -14,9 +14,9 @@
 
 Retrieves all indicators matching an input TQL query, paginates the ThreatConnect
 v3 results, and sets each indicator's confidence to the integer value of its
-`Risk List` attribute.
+`Risk Score` attribute.
 
-Indicators without a valid `Risk List` value (missing, not an integer, or outside
+Indicators without a valid `Risk Score` value (missing, not an integer, or outside
 0-100) are skipped. Indicators whose confidence already matches are skipped.
 Individual update failures are counted and do not stop the job.
 
@@ -30,5 +30,5 @@ the TQL when the job should be owner-scoped.
 ## Outputs
 
 - `indicators.updated` (String) — indicators whose confidence was updated
-- `indicators.skipped` (String) — missing/invalid Risk List, or confidence already equal
+- `indicators.skipped` (String) — missing/invalid Risk Score, or confidence already equal
 - `indicators.failed` (String) — indicators whose confidence update failed

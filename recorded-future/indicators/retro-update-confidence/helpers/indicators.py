@@ -7,17 +7,22 @@ from typing import Any
 
 import requests
 
-RISK_LIST_ATTRIBUTE_TYPE = 'Risk List'
+RISK_SCORE_ATTRIBUTE_TYPE = 'Risk Score'
 RESULT_LIMIT = 1000
 INDICATORS_PATH = '/v3/indicators'
 
 
-def iter_indicators(session: requests.Session, tql: str) -> Iterator[dict[str, Any]]:
+def iter_indicators(
+    session: requests.Session,
+    tql: str,
+    result_limit: int = RESULT_LIMIT,
+) -> Iterator[dict[str, Any]]:
     """Yield all indicators matching TQL, following v3 pagination.
 
     Args:
         session: Authenticated ThreatConnect session.
         tql: ThreatConnect Query Language filter.
+        result_limit: Page size for each GET (max 10000).
 
     Yields:
         Indicator dictionaries from the v3 API.
@@ -27,7 +32,7 @@ def iter_indicators(session: requests.Session, tql: str) -> Iterator[dict[str, A
     """
     response = session.get(
         INDICATORS_PATH,
-        params={'tql': tql, 'fields': 'attributes', 'resultLimit': RESULT_LIMIT},
+        params={'tql': tql, 'fields': 'attributes', 'resultLimit': result_limit},
     )
     while True:
         response.raise_for_status()
@@ -39,8 +44,8 @@ def iter_indicators(session: requests.Session, tql: str) -> Iterator[dict[str, A
         response = session.get(next_url)
 
 
-def risk_list_confidence(indicator: dict[str, Any]) -> int | None:
-    """Return the Risk List attribute as a 0-100 integer.
+def risk_score_confidence(indicator: dict[str, Any]) -> int | None:
+    """Return the Risk Score attribute as a 0-100 integer.
 
     Args:
         indicator: Indicator dictionary from the v3 API.
@@ -55,7 +60,7 @@ def risk_list_confidence(indicator: dict[str, Any]) -> int | None:
         attributes = []
 
     for attr in attributes:
-        if attr.get('type') != RISK_LIST_ATTRIBUTE_TYPE:
+        if attr.get('type') != RISK_SCORE_ATTRIBUTE_TYPE:
             continue
         return _parse_confidence(attr.get('value'))
     return None
@@ -84,7 +89,7 @@ def update_confidence(
 
 
 def _parse_confidence(value: Any) -> int | None:
-    """Parse a Risk List attribute value as a 0-100 integer."""
+    """Parse a Risk Score attribute value as a 0-100 integer."""
     if value is None:
         return None
     try:

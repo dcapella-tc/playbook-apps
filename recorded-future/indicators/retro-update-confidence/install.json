@@ -13,7 +13,7 @@
   "languageVersion": "3.11",
   "listDelimiter": "|",
   "minServerVersion": "7.2.0",
-  "note": "Retrieve indicators matching a TQL query and set each indicator's confidence to the integer value of its Risk List attribute.\n",
+  "note": "Retrieve indicators matching a TQL query and set each indicator's confidence to the integer value of its Risk Score attribute.\n",
   "params": [
     {
       "label": "TQL",
